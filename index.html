@@ -7,9 +7,8 @@
     <style>
         :root {
             --bg: #0a0a0c;
-            --paper: #1a1a1e;
-            --text-en: #e0e0e0;
-            --text-it: #a0a0ff;
+            --paper: #ffffff;
+            --text: #1a1a1a;
             --accent: #6d5dfc;
             --shadow: rgba(0,0,0,0.5);
         }
@@ -18,22 +17,21 @@
             margin: 0;
             padding: 0;
             background: var(--bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Georgia', serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            color: var(--text-en);
+            color: #eee;
         }
 
         .book-container {
             perspective: 2000px;
-            width: 420px; /* A5 width roughly proportional */
-            height: 594px;
+            width: 500px;
+            height: 700px;
             position: relative;
-            transition: transform 0.5s;
         }
 
         .book {
@@ -50,17 +48,43 @@
             top: 0;
             left: 0;
             background: var(--paper);
-            box-shadow: 5px 5px 15px var(--shadow);
+            box-shadow: 5px 5px 20px var(--shadow);
             transform-origin: left;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            border-radius: 4px 10px 10px 4px;
-            border: 1px solid #333;
+            border-radius: 4px 15px 15px 4px;
+            border-left: 2px solid rgba(0,0,0,0.1);
             backface-visibility: hidden;
             user-select: none;
+            color: var(--text);
+        }
+
+        /* Special styling for the very first page (Cover) */
+        .page:first-child {
+            background: var(--accent);
+            color: white;
+            border-left: 10px solid #4a3eb8;
+        }
+        
+        .page:first-child .page-content h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-top: 100px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .page:first-child .page-num { display: none; }
+
+        .cover-flag {
+            font-size: 4rem;
+            text-align: center;
+            margin-top: 40px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
         }
 
         .page.flipped {
@@ -68,50 +92,82 @@
         }
 
         .page-content {
-            padding: 30px;
+            padding: 40px;
             overflow-y: auto;
             flex-grow: 1;
             scrollbar-width: thin;
             scrollbar-color: var(--accent) transparent;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
         }
 
-        .page-content::-webkit-scrollbar {
-            width: 4px;
+        .page-content h2 {
+            margin-top: 0;
+            color: var(--accent);
+            font-family: sans-serif;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
 
-        .lang-en { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5; }
-        .lang-it { font-size: 0.9rem; color: var(--text-it); font-style: italic; border-top: 1px solid #333; padding-top: 1rem; line-height: 1.4; }
-
-        h1, h2 { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
         .page-num {
             position: absolute;
-            bottom: 10px;
-            right: 15px;
-            font-size: 0.7rem;
-            opacity: 0.5;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.75rem;
+            opacity: 0.4;
             font-family: monospace;
         }
 
         .controls {
             margin-top: 30px;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
             z-index: 100;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .control-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            font-family: sans-serif;
+            margin-bottom: 5px;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
         }
 
         button {
             background: transparent;
             border: 1px solid var(--accent);
             color: var(--accent);
-            padding: 10px 20px;
+            padding: 8px 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 20px;
             text-transform: uppercase;
+            font-size: 0.75rem;
             font-weight: bold;
             transition: all 0.3s;
         }
 
-        button:hover {
+        button:hover, button.active {
             background: var(--accent);
             color: white;
             box-shadow: 0 0 15px var(--accent);
@@ -120,127 +176,121 @@
         .paper-texture {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url("https://www.transparenttextures.com/patterns/pinstriped-suit.png");
-            opacity: 0.05;
+            background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+            opacity: 0.4;
             pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="book-container" id="bookContainer">
-        <div class="book" id="book">
-            <!-- Pages will be injected by JS -->
-        </div>
+    <div class="book-container">
+        <div class="book" id="book"></div>
     </div>
 
     <div class="controls">
-        <button onclick="prevPage()">Previous</button>
-        <button onclick="nextPage()">Next</button>
+        <div class="control-label" id="label-lang">Select Language / Seleziona Lingua</div>
+        <div class="lang-toggle">
+            <button id="btn-en" onclick="setLang('en')">English</button>
+            <button id="btn-it" onclick="setLang('it')">Italiano</button>
+        </div>
+        <div class="nav-buttons">
+            <button id="btn-prev" onclick="prevPage()">Previous</button>
+            <button id="btn-next" onclick="nextPage()">Next</button>
+        </div>
     </div>
 
     <script>
-        const content = [
+        const flags = {
+            en: '🇬🇧',
+            it: '🇮🇹'
+        };
+
+        const data = [
             {
-                title: "Vibe Coding",
-                en: "The evolution of software development from binary logic to intuitive flow. This is the era of Agentic Engineering.",
-                it: "L'evoluzione dello sviluppo software dalla logica binaria al flusso intuitivo. Questa è l'era dell'Ingegneria Agentica."
+                type: "cover",
+                title: { en: "Vibe Coding & Agentic Engineering", it: "Vibe Coding e Ingegneria Agentica" },
+                content: { en: "THE NEW ERA OF SOFTWARE", it: "LA NUOVA ERA DEL SOFTWARE" }
             },
             {
-                title: "1. The Google Era",
-                en: "At first, coding was about memory and search. We spent hours on Google looking for documentation and syntax patterns. The developer was a high-speed search engine interface.",
-                it: "All'inizio, programmare riguardava la memoria e la ricerca. Passavamo ore su Google cercando documentazione e pattern di sintassi. Lo sviluppatore era un'interfaccia di ricerca ad alta velocità."
+                title: { en: "The Dawn of Vibe Coding", it: "L'Alba del Vibe Coding" },
+                content: {
+                    en: "Vibe Coding is the paradigm shift where software development transitions from manual labor to high-level orchestration. In this new era, the 'vibe' represents the intuitive understanding of a system's architecture, state, and goals. We no longer write loops; we define outcomes. The traditional developer mindset was obsessed with syntax errors and semi-colons; the Vibe Coder is obsessed with context management and prompt engineering.",
+                    it: "Il Vibe Coding è il cambio di paradigma in cui lo sviluppo software passa dal lavoro manuale all'orchestrazione di alto livello. In questa nuova era, il 'vibe' rappresenta la comprensione intuitiva dell'architettura, dello stato e degli obiettivi di un sistema. Non scriviamo più cicli; definiamo risultati. La mentalità tradizionale dello sviluppatore era ossessionata da errori di sintassi; il Vibe Coder è ossessionato dalla gestione del contesto."
+                }
             },
             {
-                title: "2. StackOverflow",
-                en: "Then came the forum era. Copy-pasting solutions from experts became the norm. We didn't just learn language; we learned how to find the right answer to common bugs.",
-                it: "Poi è arrivata l'era dei forum. Copiare e incollare soluzioni dagli esperti divenne la norma. Non imparavamo solo il linguaggio; imparavamo a trovare la risposta giusta ai bug comuni."
+                title: { en: "The Architecture of Agents", it: "L'Architettura degli Agenti" },
+                content: {
+                    en: "Agentic Engineering goes beyond simple code completion. It involves building autonomous entities capable of planning, tool use, and self-correction. An agentic system doesn't just suggest a line of code; it reads your entire repository and proposes multi-file changes. We must now design systems that are 'Agent-Friendly'—highly modular and strictly typed. We are building the infrastructure for silicon minds to navigate.",
+                    it: "L'Ingegneria Agentica va oltre il semplice completamento del codice. Comporta la costruzione di entità autonome capaci di pianificazione, uso di strumenti e autocorrezione. Un sistema agentico non suggerisce solo una riga di codice; legge l'intero repository e propone modifiche multi-file. Dobbiamo ora progettare sistemi 'Agent-Friendly': altamente modulari e rigorosamente tipizzati. Stiamo costruendo l'infrastruttura per menti al silicio."
+                }
             },
             {
-                title: "3. The AI Awakening",
-                en: "Autocomplete evolved. GPT models began to predict our intent. The focus shifted from 'How do I write this?' to 'What do I want to build?'.",
-                it: "L'autocompletamento si è evoluto. I modelli GPT hanno iniziato a prevedere il nostro intento. Il focus si è spostato da 'Come scrivo questo?' a 'Cosa voglio costruire?'."
+                title: { en: "Context: The New Currency", it: "Contesto: La Nuova Valuta" },
+                content: {
+                    en: "In the world of AI-assisted development, context is the most valuable resource. Large Language Models (LLMs) are only as good as the information they are given. Effective Vibe Coding requires the mastery of 'Contextual Injection'—knowing exactly which files and logs to feed into the model. Senior engineers now focus on maintaining clean context boundaries, ensuring the agent has the right semantic slice of the project.",
+                    it: "Nel mondo dello sviluppo assistito dall'IA, il contesto è la risorsa più preziosa. I Large Language Models (LLMs) sono validi quanto le informazioni che ricevono. Un Vibe Coding efficace richiede la maestria dell' 'Iniezione Contestuale': sapere esattamente quali file e log inserire nel modello. I senior engineer ora si concentrano sul mantenimento di confini di contesto puliti, assicurando che l'agente abbia la corretta fetta semantica."
+                }
             },
             {
-                title: "4. Enter Vibe Coding",
-                en: "Vibe Coding is a state of flow where the programmer guides the AI using natural language and architectural intuition, trusting the 'vibe' of the code generation.",
-                it: "Il Vibe Coding è uno stato di flusso in cui il programmatore guida l'IA usando il linguaggio naturale e l'intuizione architettonica, fidandosi del 'vibe' della generazione del codice."
+                title: { en: "The Human-in-the-Loop", it: "L'Umano nel Ciclo" },
+                content: {
+                    en: "Agentic Engineering is not about replacing the developer, but about elevating them to the role of a Technical Director. Verification is the new implementation. Instead of writing code, we spend energy on rigorous testing and architectural validation. We must develop a 'smell' for AI-generated bugs—those subtle logical flaws that look correct but fail in edge cases. Intuition is the ultimate safety filter.",
+                    it: "L'Ingegneria Agentica non riguarda la sostituzione dello sviluppatore, ma l'elevazione al ruolo di Direttore Tecnico. La verifica è la nuova implementazione. Invece di scrivere codice, spendiamo energia in test rigorosi e validazione architetturale. Dobbiamo sviluppare un 'fiuto' per i bug generati dall'IA: quei sottili difetti logici che sembrano corretti ma falliscono nei casi limite. L'intuizione è il filtro di sicurezza definitivo."
+                }
             },
             {
-                title: "5. Agentic Engineering",
-                en: "Beyond simple prompts. We now build systems where AI agents collaborate to solve complex problems, debug autonomously, and write tests while we supervise the vision.",
-                it: "Oltre i semplici prompt. Ora costruiamo sistemi in cui agenti IA collaborano per risolvere problemi complessi, fanno debug autonomamente e scrivono test mentre noi supervisioniamo la visione."
-            },
-            {
-                title: "6. The Modern Stack",
-                en: "Cursor, Windsurf, Claude 3.5 Sonnet. These aren't just tools; they are extensions of our logical thinking. Syntax is becoming secondary to architecture.",
-                it: "Cursor, Windsurf, Claude 3.5 Sonnet. Questi non sono solo strumenti; sono estensioni del nostro pensiero logico. La sintassi sta diventando secondaria rispetto all'architettura."
-            },
-            {
-                title: "7. From Dev to Architect",
-                en: "The role is changing. A senior engineer today is a choreographer of AI agents. We verify, we refine, we direct. We are no longer line-by-line typists.",
-                it: "Il ruolo sta cambiando. Un senior engineer oggi è un coreografo di agenti IA. Verifichiamo, perfezioniamo, dirigiamo. Non siamo più dattilografi riga per riga."
-            },
-            {
-                title: "8. Context is King",
-                en: "The secret of vibe coding is providing the right context. If the AI understands the project's 'soul', the code follows perfectly. Garbage context, garbage vibe.",
-                it: "Il segreto del vibe coding è fornire il giusto contesto. Se l'IA capisce l''anima' del progetto, il codice segue perfettamente. Contesto spazzatura, vibe spazzatura."
-            },
-            {
-                title: "9. The Feedback Loop",
-                en: "Iterate fast. Fail fast. Let the agent fix it. The speed of development has increased 10x because the friction of syntax has been removed.",
-                it: "Itera velocemente. Fallisci velocemente. Lascia che l'agente risolva. La velocità di sviluppo è aumentata di 10 volte perché l'attrito della sintassi è stato rimosso."
-            },
-            {
-                title: "10. Debugging by Intent",
-                en: "We don't look at stack traces alone anymore. We explain the behavior we expect and let the Agentic system find the logical gap in the implementation.",
-                it: "Non guardiamo più solo gli stack trace. Spieghiamo il comportamento che ci aspettiamo e lasciamo che il sistema Agentico trovi il divario logico nell'implementazione."
-            },
-            {
-                title: "11. Human Intuition",
-                en: "Humanity provides the 'Why'. AI provides the 'How'. Vibe coding is the bridge where creativity meets extreme technical execution.",
-                it: "L'umanità fornisce il 'Perché'. L'IA fornisce il 'Come'. Il vibe coding è il ponte dove la creatività incontra l'esecuzione tecnica estrema."
-            },
-            {
-                title: "12. The Death of Boilerplate",
-                en: "No more repetitive setups. We describe the infrastructure, and the agents spin up the environments. We focus on the unique value proposition.",
-                it: "Niente più configurazioni ripetitive. Descriviamo l'infrastruttura e gli agenti avviano gli ambienti. Ci concentriamo sulla proposta di valore unica."
-            },
-            {
-                title: "13. The Responsibility",
-                en: "With great power comes the need for rigorous verification. We must be the ultimate judges of safety, ethics, and performance in an AI-generated world.",
-                it: "Da un grande potere deriva la necessità di una verifica rigorosa. Dobbiamo essere i giudici ultimi di sicurezza, etica e prestazioni in un mondo generato dall'IA."
-            },
-            {
-                title: "14. Continuous Evolution",
-                en: "Tomorrow, the agents will write the prompts for other agents. Our job is to stay at the highest level of abstraction. The 'vibe' is the destination.",
-                it: "Domani, gli agenti scriveranno i prompt per altri agenti. Il nostro compito è rimanere al massimo livello di astrazione. Il 'vibe' è la destinazione."
-            },
-            {
-                title: "15. Final Thoughts",
-                en: "Stay hungry. Stay coding. Keep the vibe. The future of engineering is not written in stone, but in the collaborative flow of carbon and silicon.",
-                it: "Rimani affamato. Continua a programmare. Mantieni il vibe. Il futuro dell'ingegneria non è scritto nella pietra, ma nel flusso collaborativo di carbonio e silicio."
+                title: { en: "The Death of Boilerplate", it: "La Morte del Boilerplate" },
+                content: {
+                    en: "Standard CRUD operations and layouting are now solved problems. Vibe Coding eliminates the 'boilerplate tax'. By leveraging agents for repetitive plumbing, engineers can focus on 'Core Logic'—the unique value proposition. The cost of building a feature is dropping, but the value of original architectural thinking is skyrocketing. Creativity and strategic thinking are the only bottlenecks remaining.",
+                    it: "Le operazioni CRUD standard e il layout sono ormai problemi risolti. Il Vibe Coding elimina la 'tassa sul boilerplate'. Sfruttando gli agenti per il lavoro ripetitivo, gli ingegneri possono concentrarsi sulla 'Logica Core'. Il costo di costruzione di una funzionalità sta crollando, ma il valore del pensiero architettonico originale sta salendo alle stelle. La creatività e la strategia sono gli unici colli di bottiglia rimasti."
+                }
             }
         ];
 
-        const book = document.getElementById('book');
+        const uiStrings = {
+            prev: { en: "Previous", it: "Precedente" },
+            next: { en: "Next", it: "Successivo" },
+            label: { en: "Select Language", it: "Seleziona Lingua" }
+        };
+
+        let currentLang = localStorage.getItem('bookLang') || 'en';
         let currentPage = 0;
 
-        function initBook() {
-            content.forEach((item, index) => {
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('bookLang', lang);
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+            
+            document.getElementById('label-lang').textContent = uiStrings.label[lang];
+            document.getElementById('btn-prev').textContent = uiStrings.prev[lang];
+            document.getElementById('btn-next').textContent = uiStrings.next[lang];
+            
+            renderBook();
+        }
+
+        function renderBook() {
+            const book = document.getElementById('book');
+            book.innerHTML = '';
+            
+            data.forEach((item, index) => {
                 const page = document.createElement('div');
                 page.className = 'page';
-                page.style.zIndex = content.length - index;
+                if (index < currentPage) page.classList.add('flipped');
+                page.style.zIndex = data.length - index;
                 
-                page.innerHTML = `
-                    <div class="paper-texture"></div>
-                    <div class="page-content">
-                        <h2>${item.title}</h2>
-                        <div class="lang-en">${item.en}</div>
-                        <div class="lang-it">${item.it}</div>
-                        <div class="page-num">Page ${index + 1}</div>
-                    </div>
-                `;
+                let html = `<div class="paper-texture"></div><div class="page-content">`;
+                
+                if (item.type === "cover") {
+                    html += `<h1>${item.title[currentLang]}</h1><p style="text-align:center; font-weight:bold; margin-top:50px; opacity:0.8">${item.content[currentLang]}</p><div class="cover-flag">${flags[currentLang]}</div>`;
+                } else {
+                    html += `<h2>${item.title[currentLang]}</h2><p>${item.content[currentLang]}</p>`;
+                }
+                
+                html += `</div><div class="page-num">${index}</div>`;
+                page.innerHTML = html;
                 
                 page.addEventListener('click', () => {
                     if (index === currentPage) nextPage();
@@ -267,7 +317,8 @@
             }
         }
 
-        initBook();
+        // Initialize with saved language
+        setLang(currentLang);
     </script>
 </body>
 </html>
