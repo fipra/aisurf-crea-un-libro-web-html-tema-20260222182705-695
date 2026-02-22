@@ -80,13 +80,6 @@
 
         .page:first-child .page-num { display: none; }
 
-        .cover-flag {
-            font-size: 4rem;
-            text-align: center;
-            margin-top: 40px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-        }
-
         .page.flipped {
             transform: rotateY(-180deg);
         }
@@ -191,8 +184,8 @@
     <div class="controls">
         <div class="control-label" id="label-lang">Select Language / Seleziona Lingua</div>
         <div class="lang-toggle">
-            <button id="btn-en" onclick="setLang('en')">🇬🇧 English</button>
-            <button id="btn-it" onclick="setLang('it')">🇮🇹 Italiano</button>
+            <button id="btn-en" onclick="setLang('en')">English</button>
+            <button id="btn-it" onclick="setLang('it')">Italiano</button>
         </div>
         <div class="nav-buttons">
             <button id="btn-prev" onclick="prevPage()">Previous</button>
@@ -201,11 +194,6 @@
     </div>
 
     <script>
-        const flags = {
-            en: '🇬🇧',
-            it: '🇮🇹'
-        };
-
         const data = [
             {
                 type: "cover",
@@ -237,7 +225,7 @@
                 title: { en: "The Human-in-the-Loop", it: "L'Umano nel Ciclo" },
                 content: {
                     en: "Agentic Engineering is not about replacing the developer, but about elevating them to the role of a Technical Director. Verification is the new implementation. Instead of writing code, we spend energy on rigorous testing and architectural validation. We must develop a 'smell' for AI-generated bugs—those subtle logical flaws that look correct but fail in edge cases. Intuition is the ultimate safety filter.",
-                    it: "L'Ingegneria Agentica non riguarda la sostituzione dello sviluppatore, ma l'elevazione al ruolo di Direttore Tecnico. La verifica è la nuova implementazione. Invece di scrivere codice, spendiamo energia in test rigorosi e validazione architettonale. Dobbiamo sviluppare un 'fiuto' per i bug generati dall'IA: quei sottili difetti logici che sembrano corretti ma falliscono nei casi limite. L'intuizione è il filtro di sicurezza definitivo."
+                    it: "L'Ingegneria Agentica non riguarda la sostituzione dello sviluppatore, ma l'elevazione al ruolo di Direttore Tecnico. La verifica è la nuova implementazione. Invece di scrivere codice, spendiamo energia in test rigorosi e validazione architetturale. Dobbiamo sviluppare un 'fiuto' per i bug generati dall'IA: quei sottili difetti logici che sembrano corretti ma falliscono nei casi limite. L'intuizione è il filtro di sicurezza definitivo."
                 }
             },
             {
@@ -284,7 +272,7 @@
                 let html = `<div class="paper-texture"></div><div class="page-content">`;
                 
                 if (item.type === "cover") {
-                    html += `<h1>${item.title[currentLang]}</h1><p style="text-align:center; font-weight:bold; margin-top:50px; opacity:0.8">${item.content[currentLang]}</p><div class="cover-flag">${flags[currentLang]}</div>`;
+                    html += `<h1>${item.title[currentLang]}</h1><p style="text-align:center; font-weight:bold; margin-top:50px; opacity:0.8">${item.content[currentLang]}</p>`;
                 } else {
                     html += `<h2>${item.title[currentLang]}</h2><p>${item.content[currentLang]}</p>`;
                 }
