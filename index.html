@@ -80,6 +80,13 @@
 
         .page:first-child .page-num { display: none; }
 
+        .cover-flag {
+            font-size: 4rem;
+            text-align: center;
+            margin-top: 40px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
         .page.flipped {
             transform: rotateY(-180deg);
         }
@@ -194,6 +201,11 @@
     </div>
 
     <script>
+        const flags = {
+            en: '🇬🇧',
+            it: '🇮🇹'
+        };
+
         const data = [
             {
                 type: "cover",
@@ -272,7 +284,7 @@
                 let html = `<div class="paper-texture"></div><div class="page-content">`;
                 
                 if (item.type === "cover") {
-                    html += `<h1>${item.title[currentLang]}</h1><p style="text-align:center; font-weight:bold; margin-top:50px; opacity:0.8">${item.content[currentLang]}</p>`;
+                    html += `<h1>${item.title[currentLang]}</h1><p style="text-align:center; font-weight:bold; margin-top:50px; opacity:0.8">${item.content[currentLang]}</p><div class="cover-flag">${flags[currentLang]}</div>`;
                 } else {
                     html += `<h2>${item.title[currentLang]}</h2><p>${item.content[currentLang]}</p>`;
                 }
