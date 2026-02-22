@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding & Agentic Engineering: The Book</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --paper: #1a1a1e;
+            --text-en: #e0e0e0;
+            --text-it: #a0a0ff;
+            --accent: #6d5dfc;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            color: var(--text-en);
+        }
+
+        .book-container {
+            perspective: 2000px;
+            width: 420px; /* A5 width roughly proportional */
+            height: 594px;
+            position: relative;
+            transition: transform 0.5s;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: var(--paper);
+            box-shadow: 5px 5px 15px var(--shadow);
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px 10px 10px 4px;
+            border: 1px solid #333;
+            backface-visibility: hidden;
+            user-select: none;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .page-content {
+            padding: 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+        }
+
+        .page-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .lang-en { font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .lang-it { font-size: 0.9rem; color: var(--text-it); font-style: italic; border-top: 1px solid #333; padding-top: 1rem; line-height: 1.4; }
+
+        h1, h2 { color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        .page-num {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            opacity: 0.5;
+            font-family: monospace;
+        }
+
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .paper-texture {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/pinstriped-suit.png");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-container" id="bookContainer">
+        <div class="book" id="book">
+            <!-- Pages will be injected by JS -->
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevPage()">Previous</button>
+        <button onclick="nextPage()">Next</button>
+    </div>
+
+    <script>
+        const content = [
+            {
+                title: "Vibe Coding",
+                en: "The evolution of software development from binary logic to intuitive flow. This is the era of Agentic Engineering.",
+                it: "L'evoluzione dello sviluppo software dalla logica binaria al flusso intuitivo. Questa è l'era dell'Ingegneria Agentica."
+            },
+            {
+                title: "1. The Google Era",
+                en: "At first, coding was about memory and search. We spent hours on Google looking for documentation and syntax patterns. The developer was a high-speed search engine interface.",
+                it: "All'inizio, programmare riguardava la memoria e la ricerca. Passavamo ore su Google cercando documentazione e pattern di sintassi. Lo sviluppatore era un'interfaccia di ricerca ad alta velocità."
+            },
+            {
+                title: "2. StackOverflow",
+                en: "Then came the forum era. Copy-pasting solutions from experts became the norm. We didn't just learn language; we learned how to find the right answer to common bugs.",
+                it: "Poi è arrivata l'era dei forum. Copiare e incollare soluzioni dagli esperti divenne la norma. Non imparavamo solo il linguaggio; imparavamo a trovare la risposta giusta ai bug comuni."
+            },
+            {
+                title: "3. The AI Awakening",
+                en: "Autocomplete evolved. GPT models began to predict our intent. The focus shifted from 'How do I write this?' to 'What do I want to build?'.",
+                it: "L'autocompletamento si è evoluto. I modelli GPT hanno iniziato a prevedere il nostro intento. Il focus si è spostato da 'Come scrivo questo?' a 'Cosa voglio costruire?'."
+            },
+            {
+                title: "4. Enter Vibe Coding",
+                en: "Vibe Coding is a state of flow where the programmer guides the AI using natural language and architectural intuition, trusting the 'vibe' of the code generation.",
+                it: "Il Vibe Coding è uno stato di flusso in cui il programmatore guida l'IA usando il linguaggio naturale e l'intuizione architettonica, fidandosi del 'vibe' della generazione del codice."
+            },
+            {
+                title: "5. Agentic Engineering",
+                en: "Beyond simple prompts. We now build systems where AI agents collaborate to solve complex problems, debug autonomously, and write tests while we supervise the vision.",
+                it: "Oltre i semplici prompt. Ora costruiamo sistemi in cui agenti IA collaborano per risolvere problemi complessi, fanno debug autonomamente e scrivono test mentre noi supervisioniamo la visione."
+            },
+            {
+                title: "6. The Modern Stack",
+                en: "Cursor, Windsurf, Claude 3.5 Sonnet. These aren't just tools; they are extensions of our logical thinking. Syntax is becoming secondary to architecture.",
+                it: "Cursor, Windsurf, Claude 3.5 Sonnet. Questi non sono solo strumenti; sono estensioni del nostro pensiero logico. La sintassi sta diventando secondaria rispetto all'architettura."
+            },
+            {
+                title: "7. From Dev to Architect",
+                en: "The role is changing. A senior engineer today is a choreographer of AI agents. We verify, we refine, we direct. We are no longer line-by-line typists.",
+                it: "Il ruolo sta cambiando. Un senior engineer oggi è un coreografo di agenti IA. Verifichiamo, perfezioniamo, dirigiamo. Non siamo più dattilografi riga per riga."
+            },
+            {
+                title: "8. Context is King",
+                en: "The secret of vibe coding is providing the right context. If the AI understands the project's 'soul', the code follows perfectly. Garbage context, garbage vibe.",
+                it: "Il segreto del vibe coding è fornire il giusto contesto. Se l'IA capisce l''anima' del progetto, il codice segue perfettamente. Contesto spazzatura, vibe spazzatura."
+            },
+            {
+                title: "9. The Feedback Loop",
+                en: "Iterate fast. Fail fast. Let the agent fix it. The speed of development has increased 10x because the friction of syntax has been removed.",
+                it: "Itera velocemente. Fallisci velocemente. Lascia che l'agente risolva. La velocità di sviluppo è aumentata di 10 volte perché l'attrito della sintassi è stato rimosso."
+            },
+            {
+                title: "10. Debugging by Intent",
+                en: "We don't look at stack traces alone anymore. We explain the behavior we expect and let the Agentic system find the logical gap in the implementation.",
+                it: "Non guardiamo più solo gli stack trace. Spieghiamo il comportamento che ci aspettiamo e lasciamo che il sistema Agentico trovi il divario logico nell'implementazione."
+            },
+            {
+                title: "11. Human Intuition",
+                en: "Humanity provides the 'Why'. AI provides the 'How'. Vibe coding is the bridge where creativity meets extreme technical execution.",
+                it: "L'umanità fornisce il 'Perché'. L'IA fornisce il 'Come'. Il vibe coding è il ponte dove la creatività incontra l'esecuzione tecnica estrema."
+            },
+            {
+                title: "12. The Death of Boilerplate",
+                en: "No more repetitive setups. We describe the infrastructure, and the agents spin up the environments. We focus on the unique value proposition.",
+                it: "Niente più configurazioni ripetitive. Descriviamo l'infrastruttura e gli agenti avviano gli ambienti. Ci concentriamo sulla proposta di valore unica."
+            },
+            {
+                title: "13. The Responsibility",
+                en: "With great power comes the need for rigorous verification. We must be the ultimate judges of safety, ethics, and performance in an AI-generated world.",
+                it: "Da un grande potere deriva la necessità di una verifica rigorosa. Dobbiamo essere i giudici ultimi di sicurezza, etica e prestazioni in un mondo generato dall'IA."
+            },
+            {
+                title: "14. Continuous Evolution",
+                en: "Tomorrow, the agents will write the prompts for other agents. Our job is to stay at the highest level of abstraction. The 'vibe' is the destination.",
+                it: "Domani, gli agenti scriveranno i prompt per altri agenti. Il nostro compito è rimanere al massimo livello di astrazione. Il 'vibe' è la destinazione."
+            },
+            {
+                title: "15. Final Thoughts",
+                en: "Stay hungry. Stay coding. Keep the vibe. The future of engineering is not written in stone, but in the collaborative flow of carbon and silicon.",
+                it: "Rimani affamato. Continua a programmare. Mantieni il vibe. Il futuro dell'ingegneria non è scritto nella pietra, ma nel flusso collaborativo di carbonio e silicio."
+            }
+        ];
+
+        const book = document.getElementById('book');
+        let currentPage = 0;
+
+        function initBook() {
+            content.forEach((item, index) => {
+                const page = document.createElement('div');
+                page.className = 'page';
+                page.style.zIndex = content.length - index;
+                
+                page.innerHTML = `
+                    <div class="paper-texture"></div>
+                    <div class="page-content">
+                        <h2>${item.title}</h2>
+                        <div class="lang-en">${item.en}</div>
+                        <div class="lang-it">${item.it}</div>
+                        <div class="page-num">Page ${index + 1}</div>
+                    </div>
+                `;
+                
+                page.addEventListener('click', () => {
+                    if (index === currentPage) nextPage();
+                    else if (index === currentPage - 1) prevPage();
+                });
+
+                book.appendChild(page);
+            });
+        }
+
+        function nextPage() {
+            const pages = document.querySelectorAll('.page');
+            if (currentPage < pages.length) {
+                pages[currentPage].classList.add('flipped');
+                currentPage++;
+            }
+        }
+
+        function prevPage() {
+            const pages = document.querySelectorAll('.page');
+            if (currentPage > 0) {
+                currentPage--;
+                pages[currentPage].classList.remove('flipped');
+            }
+        }
+
+        initBook();
+    </script>
+</body>
+</html>
