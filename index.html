@@ -132,7 +132,6 @@
             letter-spacing: 1px;
             opacity: 0.5;
             font-family: sans-serif;
-            margin-bottom: 5px;
         }
 
         .lang-toggle {
@@ -182,10 +181,11 @@
     </div>
 
     <div class="controls">
-        <div class="control-label" id="label-lang">Select Language / Seleziona Lingua</div>
+        <div class="control-label">Language / Lingua / Idioma</div>
         <div class="lang-toggle">
-            <button id="btn-en" onclick="setLang('en')">English</button>
+            <button id="btn-en" onclick="setLang('en')" class="active">English</button>
             <button id="btn-it" onclick="setLang('it')">Italiano</button>
+            <button id="btn-es" onclick="setLang('es')">Español</button>
         </div>
         <div class="nav-buttons">
             <button id="btn-prev" onclick="prevPage()">Previous</button>
@@ -197,62 +197,65 @@
         const data = [
             {
                 type: "cover",
-                title: { en: "Vibe Coding & Agentic Engineering", it: "Vibe Coding e Ingegneria Agentica" },
-                content: { en: "THE NEW ERA OF SOFTWARE", it: "LA NUOVA ERA DEL SOFTWARE" }
+                title: { en: "Vibe Coding & Agentic Engineering", it: "Vibe Coding e Ingegneria Agentica", es: "Vibe Coding e Ingeniería Agéntica" },
+                content: { en: "THE NEW ERA OF SOFTWARE", it: "LA NUOVA ERA DEL SOFTWARE", es: "LA NUEVA ERA DEL SOFTWARE" }
             },
             {
-                title: { en: "The Dawn of Vibe Coding", it: "L'Alba del Vibe Coding" },
+                title: { en: "The Dawn of Vibe Coding", it: "L'Alba del Vibe Coding", es: "El Amanecer del Vibe Coding" },
                 content: {
                     en: "Vibe Coding is the paradigm shift where software development transitions from manual labor to high-level orchestration. In this new era, the 'vibe' represents the intuitive understanding of a system's architecture, state, and goals. We no longer write loops; we define outcomes. The traditional developer mindset was obsessed with syntax errors and semi-colons; the Vibe Coder is obsessed with context management and prompt engineering.",
-                    it: "Il Vibe Coding è il cambio di paradigma in cui lo sviluppo software passa dal lavoro manuale all'orchestrazione di alto livello. In questa nuova era, il 'vibe' rappresenta la comprensione intuitiva dell'architettura, dello stato e degli obiettivi di un sistema. Non scriviamo più cicli; definiamo risultati. La mentalità tradizionale dello sviluppatore era ossessionata da errori di sintassi; il Vibe Coder è ossessionato dalla gestione del contesto."
+                    it: "Il Vibe Coding è il cambio di paradigma in cui lo sviluppo software passa dal lavoro manuale all'orchestrazione di alto livello. In questa nuova era, il 'vibe' rappresenta la comprensione intuitiva dell'architettura, dello stato e degli obiettivi di un sistema. Non scriviamo più cicli; definiamo risultati. La mentalità tradizionale dello sviluppatore era ossessionata da errori di sintassi; il Vibe Coder è ossessionato dalla gestione del contesto.",
+                    es: "El Vibe Coding es el cambio de paradigma donde el desarrollo de software pasa del trabajo manual a la orquestación de alto nivel. En esta nueva era, el 'vibe' representa la comprensión intuitiva de la arquitectura, el estado y los objetivos de un sistema. Ya no escribimos bucles; definimos resultados. La mentalidad del desarrollador tradicional estaba obsesionada con los errores de sintaxis; el Vibe Coder se obsesiona con la gestión del contexto."
                 }
             },
             {
-                title: { en: "The Architecture of Agents", it: "L'Architettura degli Agenti" },
+                title: { en: "The Architecture of Agents", it: "L'Architettura degli Agenti", es: "La Arquitectura de los Agentes" },
                 content: {
                     en: "Agentic Engineering goes beyond simple code completion. It involves building autonomous entities capable of planning, tool use, and self-correction. An agentic system doesn't just suggest a line of code; it reads your entire repository and proposes multi-file changes. We must now design systems that are 'Agent-Friendly'—highly modular and strictly typed. We are building the infrastructure for silicon minds to navigate.",
-                    it: "L'Ingegneria Agentica va oltre il semplice completamento del codice. Comporta la costruzione di entità autonome capaci di pianificazione, uso di strumenti e autocorrezione. Un sistema agentico non suggerisce solo una riga di codice; legge l'intero repository e propone modifiche multi-file. Dobbiamo ora progettare sistemi 'Agent-Friendly': altamente modulari e rigorosamente tipizzati. Stiamo costruendo l'infrastruttura per menti al silicio."
+                    it: "L'Ingegneria Agentica va oltre il semplice completamento del codice. Comporta la costruzione di entità autonome capaci di pianificazione, uso di strumenti e autocorrezione. Un sistema agentico non suggerisce solo una riga di codice; legge l'intero repository e propone modifiche multi-file. Dobbiamo ora progettare sistemi 'Agent-Friendly': altamente modulari e rigorosamente tipizzati. Stiamo costruendo l'infrastruttura per menti al silicio.",
+                    es: "La Ingeniería Agéntica va más allá de la simple completación de código. Implica construir entidades autónomas capaces de planificar, usar herramientas y autocorregirse. Un sistema agéntico no solo sugiere una línea de código; lee todo tu repositorio y propone cambios en múltiples archivos. Ahora debemos diseñar sistemas 'Agent-Friendly': altamente modulares y estrictamente tipados. Estamos construyendo la infraestructura para mentes de silicio."
                 }
             },
             {
-                title: { en: "Context: The New Currency", it: "Contesto: La Nuova Valuta" },
+                title: { en: "Context: The New Currency", it: "Contesto: La Nuova Valuta", es: "Contexto: La Nueva Moneda" },
                 content: {
                     en: "In the world of AI-assisted development, context is the most valuable resource. Large Language Models (LLMs) are only as good as the information they are given. Effective Vibe Coding requires the mastery of 'Contextual Injection'—knowing exactly which files and logs to feed into the model. Senior engineers now focus on maintaining clean context boundaries, ensuring the agent has the right semantic slice of the project.",
-                    it: "Nel mondo dello sviluppo assistito dall'IA, il contesto è la risorsa più preziosa. I Large Language Models (LLMs) sono validi quanto le informazioni che ricevono. Un Vibe Coding efficace richiede la maestria dell' 'Iniezione Contestuale': sapere esattamente quali file e log inserire nel modello. I senior engineer ora si concentrano sul mantenimento di confini di contesto puliti, assicurando che l'agente abbia la corretta fetta semantica."
+                    it: "Nel mondo dello sviluppo assistito dall'IA, il contesto è la risorsa più preziosa. I Large Language Models (LLMs) sono validi quanto le informazioni che ricevono. Un Vibe Coding efficace richiede la maestria dell' 'Iniezione Contestuale': sapere esattamente quali file e log inserire nel modello. I senior engineer ora si concentrano sul mantenimento di confini di contesto puliti, assicurando che l'agente abbia la corretta fetta semantica.",
+                    es: "En el mundo del desarrollo asistido por IA, el contexto es el recurso más valioso. Los Modelos de Lenguaje (LLMs) son tan buenos como la información que reciben. El Vibe Coding eficaz requiere el dominio de la 'Inyección Contextual': saber exactamente qué archivos y registros alimentar al modelo. Los ingenieros senior ahora se centran en mantener límites de contexto limpios, asegurando que el agente tenga la porción semántica correcta."
                 }
             },
             {
-                title: { en: "The Human-in-the-Loop", it: "L'Umano nel Ciclo" },
+                title: { en: "The Human-in-the-Loop", it: "L'Umano nel Ciclo", es: "El Humano en el Bucle" },
                 content: {
                     en: "Agentic Engineering is not about replacing the developer, but about elevating them to the role of a Technical Director. Verification is the new implementation. Instead of writing code, we spend energy on rigorous testing and architectural validation. We must develop a 'smell' for AI-generated bugs—those subtle logical flaws that look correct but fail in edge cases. Intuition is the ultimate safety filter.",
-                    it: "L'Ingegneria Agentica non riguarda la sostituzione dello sviluppatore, ma l'elevazione al ruolo di Direttore Tecnico. La verifica è la nuova implementazione. Invece di scrivere codice, spendiamo energia in test rigorosi e validazione architetturale. Dobbiamo sviluppare un 'fiuto' per i bug generati dall'IA: quei sottili difetti logici che sembrano corretti ma falliscono nei casi limite. L'intuizione è il filtro di sicurezza definitivo."
+                    it: "L'Ingegneria Agentica non riguarda la sostituzione dello sviluppatore, ma l'elevazione al ruolo di Direttore Tecnico. La verifica è la nuova implementazione. Invece di scrivere codice, spendiamo energia in test rigorosi e validazione architetturale. Dobbiamo sviluppare un 'fiuto' per i bug generati dall'IA: quei sottili difetti logici che sembrano corretti ma falliscono nei casi limite. L'intuizione è il filtro di sicurezza definitivo.",
+                    es: "La Ingeniería Agéntica no se trata de reemplazar al desarrollador, sino de elevarlo al rol de Director Técnico. La verificación es la nueva implementación. En lugar de escribir código, gastamos energía en pruebas rigurosas y validación arquitectónica. Debemos desarrollar un 'olfato' para los errores generados por IA: esos sutiles fallos lógicos que parecen correctos pero fallan en casos límite. La intuición es el filtro de seguridad definitivo."
                 }
             },
             {
-                title: { en: "The Death of Boilerplate", it: "La Morte del Boilerplate" },
+                title: { en: "The Death of Boilerplate", it: "La Morte del Boilerplate", es: "La Muerte del Boilerplate" },
                 content: {
                     en: "Standard CRUD operations and layouting are now solved problems. Vibe Coding eliminates the 'boilerplate tax'. By leveraging agents for repetitive plumbing, engineers can focus on 'Core Logic'—the unique value proposition. The cost of building a feature is dropping, but the value of original architectural thinking is skyrocketing. Creativity and strategic thinking are the only bottlenecks remaining.",
-                    it: "Le operazioni CRUD standard e il layout sono ormai problemi risolti. Il Vibe Coding elimina la 'tassa sul boilerplate'. Sfruttando gli agenti per il lavoro ripetitivo, gli ingegneri possono concentrarsi sulla 'Logica Core'. Il costo di costruzione di una funzionalità sta crollando, ma il valore del pensiero architettonico originale sta salendo alle stelle. La creatività e la strategia sono gli unici colli di bottiglia rimasti."
+                    it: "Le operazioni CRUD standard e il layout sono ormai problemi risolti. Il Vibe Coding elimina la 'tassa sul boilerplate'. Sfruttando gli agenti per il lavoro ripetitivo, gli ingegneri possono concentrarsi sulla 'Logica Core'. Il costo di costruzione di una funzionalità sta crollando, ma il valore del pensiero architettonico originale sta salendo alle stelle. La creatività e la strategia sono gli unici colli di bottiglia rimasti.",
+                    es: "Las operaciones CRUD estándar y el diseño son ahora problemas resueltos. El Vibe Coding elimina el 'impuesto al boilerplate'. Al aprovechar agentes para el trabajo repetitivo, los ingenieros pueden centrarse en la 'Lógica Central'. El coste de construir una funcionalidad está cayendo, pero el valor del pensamiento arquitectónico original se está disparando. La creatividad y la estrategia son los únicos cuellos de botella."
                 }
             }
         ];
 
         const uiStrings = {
-            prev: { en: "Previous", it: "Precedente" },
-            next: { en: "Next", it: "Successivo" },
-            label: { en: "Select Language", it: "Seleziona Lingua" }
+            prev: { en: "Previous", it: "Precedente", es: "Anterior" },
+            next: { en: "Next", it: "Successivo", es: "Siguiente" }
         };
 
-        let currentLang = localStorage.getItem('bookLang') || 'en';
+        let currentLang = 'en';
         let currentPage = 0;
 
         function setLang(lang) {
             currentLang = lang;
-            localStorage.setItem('bookLang', lang);
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
             document.getElementById('btn-it').classList.toggle('active', lang === 'it');
+            document.getElementById('btn-es').classList.toggle('active', lang === 'es');
             
-            document.getElementById('label-lang').textContent = uiStrings.label[lang];
             document.getElementById('btn-prev').textContent = uiStrings.prev[lang];
             document.getElementById('btn-next').textContent = uiStrings.next[lang];
             
@@ -305,8 +308,7 @@
             }
         }
 
-        // Initialize with saved language
-        setLang(currentLang);
+        renderBook();
     </script>
 </body>
 </html>
